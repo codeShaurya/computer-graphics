@@ -1,68 +1,62 @@
 #include <stdio.h>
 #include <graphics.h>
 #include <math.h>
-int gd = DETECT, gm = 0;
+
 const double PI = acos(-1.0);
-struct pt
-{
+struct pt {
 	int x;
 	int y;
 };
-struct map
-{
+
+struct map {
 	int a;
 	int b;
 };
 
-void original(struct pt a[], struct map s[], int n)
-{
+void original(struct pt a[], struct map s[], int n) {
 	int i;
-	for (i = 0; i < n; i++)
-	{
+	for (i = 0; i < n; i++) {
 		line(a[s[i].a].x, a[s[i].a].y, a[s[i].b].x, a[s[i].b].y);
 	}
 }
 
-void translate(struct pt a[], int n, int x, int y)
-{
+void translate(struct pt a[], int n, int x, int y) {
 	int i;
-	for (i = 0; i < n; i++)
-	{
+	for (i = 0; i < n; i++) {
 		a[i].x -= x;
 		a[i].y -= y;
 	}
 }
 
-struct pt rotate_pt(struct pt p, double rad)
-{
+struct pt rotate_pt(struct pt p, double rad) {
 	struct pt p1;
 	p1.x = (float)(cos(rad) * (p.x) * 1.0 - sin(rad) * (p.y) * 1.0);
 	p1.y = (float)(sin(rad) * (p.x) * 1.0 + cos(rad) * (p.y) * 1.0);
 	return p1;
 }
 
-void rotate(struct pt s[], int n, double rad)
-{
+void rotate(struct pt s[], int n, double rad) {
 	int i;
 	for (i = 0; i < n; i++)
 		s[i] = rotate_pt(s[i], rad);
 }
 
-int main()
-{
+int main() {
+	int gd = DETECT, gm = 0;
 	int n, i, x, y;
 	double rad;
+
 	scanf("%d", &n);
 	struct pt a[n], axis;
 	struct map e[n];
-	for (i = 0; i < n; i++)
-	{
+	
+	for (i = 0; i < n; i++) {
 		scanf("%d %d", &x, &y);
 		a[i].x = x;
 		a[i].y = y;
 	}
-	for (i = 0; i < n; i++)
-	{
+	
+	for (i = 0; i < n; i++) {
 		scanf("%d %d", &x, &y);
 		e[i].a = x - 1;
 		e[i].b = y - 1;
@@ -80,7 +74,7 @@ int main()
 	setcolor(4);
 	original(a, e, n);
 
-	delay(5000);
+	getch();
 	closegraph();
 	for (i = 0; i < n; i++)
 		printf("%d %d\n", a[i].x, a[i].y);
@@ -89,7 +83,6 @@ int main()
 }
 
 /*
-
 3
 100 100
 200 200
@@ -99,5 +92,4 @@ int main()
 3 2
 50 50
 -45
-
 */

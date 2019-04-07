@@ -6,6 +6,7 @@ struct pt{
 	int x;
 	int y;
 };
+
 struct map{
 	int a;
 	int b;
@@ -55,18 +56,21 @@ void main(){
 		e[i].b=y-1;
 	}
 	initgraph(&gd,&gm,0);
+	
 	original(a,e,n,0,0);
 	reflect_xy(a,n);
 	setcolor(4);
 	original(a,e,n,0,0);
-	delay(5000);
+	
+	getch();
 	closegraph();
+
 	for(i=0;i<n;i++)
 		printf("%d %d\n",a[i].x,a[i].y);
+	return 0;
 }
 
 /*
-
 3
 100 150
 200 250
@@ -74,5 +78,4 @@ void main(){
 1 2
 1 3
 3 2
-
 */

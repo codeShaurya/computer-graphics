@@ -101,7 +101,7 @@ int main()
         line(xx1, yy1, xx2, yy2);
     }
 
-    delay(5000);
+    getch();
     closegraph();
     return 0;
 }

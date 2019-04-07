@@ -79,7 +79,8 @@ void MPE(){
 		DE(x,y,xc,yc);
 		
 	}
-	p=ry*ry*(x+0.5)*(x+0.5)+rx*rx*(y-1.0)*(y-1.0)-1.0*rx*rx*ry*ry;
+	
+	p = ry*ry*(x+0.5)*(x+0.5)+rx*rx*(y-1.0)*(y-1.0)-1.0*rx*rx*ry*ry;
 		
 	DE(x,y,xc,yc);
 	while(y>0){

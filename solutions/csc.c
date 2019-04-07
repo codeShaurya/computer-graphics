@@ -1,107 +1,79 @@
-#include<stdio.h>
-#include<graphics.h>
-int gd=DETECT,gm=0;
+#include <bits/stdc++.h>
+#include <graphics.h>
+using namespace std;
 
-int code(int x,int y,int xmin,int xmax,int ymin,int ymax){
-	int r=0;
-	if(x<xmin)
-		r=r|(1<<0);
-	if(x>xmax)
-		r=r|(1<<1);
-	if(y>ymax)
-		r=r|(1<<2);
-	if(y<ymin)
-		r=r|(1<<3);
-	return r;
+int main(){
+
+  int gd=DETECT,gm=0;
+  cout<<"Enter the number of vertices"<<endl;
+  int n;
+  cin>>n;
+  int a[n+1][2];
+  float slope[n+1];
+  vector<int> xk(20);
+  int ymin=INT_MAX,ymax=INT_MIN;
+  for(int i=0;i<n;i++){
+    int p,q;
+    cin>>p>>q;
+    a[i][0]=p;
+    a[i][1]=q;
+    if(q<ymin)
+      ymin=q;
+    if(q>ymax)
+      ymax=q;
+  }
+  a[n][0]=a[0][0];
+  a[n][1]=a[0][1];
+  initgraph(&gd, &gm, NULL);
+
+  for(int i=0;i<n;i++){
+    int dy=a[i+1][1]-a[i][1];
+    int dx = a[i + 1][0] - a[i][0];
+    if(dy=0)
+      slope[i]=1.0;
+    if(dx=0)
+      slope[i]=0.0;
+    if(dy!=0&&dx!=0)
+      slope[i]=(float)dx/dy;
+    line(a[i][0],a[i][1],a[i+1][0],a[i+1][1]);
+
+  }
+  for(int y=ymin;y<=ymax;y++){
+    int k=0;
+    for (int i = 0; i < n; i++)
+    {
+      if (((a[i][1] <= y) && (a[i + 1][1] > y)) || ((a[i][1] > y) && (a[i + 1][1] <= y)))
+      {
+        xk[k] = (int)(a[i][0] + slope[i] * (y - a[i][1]));
+        k++;
+      }
+    }
+    // for(int n=0;n<k;n++){
+    //   cout<<xk[n]<<" ";
+    // }
+    for (int j = 0; j < k - 1; j++)
+    {
+      for (int i = 0; i < k - 1; i++)
+      {
+        if (xk[i] > xk[i + 1])
+        {
+          int temp = xk[i];
+          xk[i] = xk[i + 1];
+          xk[i + 1] = temp;
+        }
+      }
+
+    }
+      for (int i = 0; i < k; i += 2)
+      {
+        line(xk[i], y, xk[i + 1], y);
+        delay(100);
+      }
+
+
+  }
+
+  getch();
+
+  return 0;
 }
-
-void main(){
-	int x1,y1,x2,y2,i;
-	int xmin,xmax,ymin,ymax;
-	scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
-	scanf("%d %d %d %d",&xmin,&xmax,&ymin,&ymax);
-	int r1=code(x1,y1,xmin,xmax,ymin,ymax);
-	int r2=code(x2,y2,xmin,xmax,ymin,ymax);
-	int c=r1&r2;
-//	printf("%d %d %d\n",r1,r2,c);
-
-	initgraph(&gd,&gm,0);
-	line(x1,y1,x2,y2);
-
-	line(xmin,ymin,xmin,ymax);
-	line(xmin,ymax,xmax,ymax);
-	line(xmax,ymax,xmax,ymin);
-	line(xmax,ymin,xmin,ymin);
-
-
-	if(r1==0 && r2==0){
-		printf("No clipping required\n");
-	}else if(c!=0){
-		printf("Entire line is outside\n");
-		x1=x2=0;
-		y1=y2=0;
-	}else{
-		for(i=0;i<4;i++){
-			int b1=r1&(1<<i);
-			int b2=r2&(1<<i);
-			int x,y;
-			double m=(1.0*(y2-y1))/(x2-x1);
-	
-			if(b1!=b2){
-				if(i==0){
-					x=xmin;
-					y=y1+m*(xmin-x1);
-					if(x1<xmin){
-						x1=x;y1=y;
-					}else{
-						x2=x;y2=y;
-					}
-				}
-				else if(i==1){
-					x=xmax;
-					y=y1+m*(xmax-x1);
-					if(x1>xmax){
-						x1=x;y1=y;
-					}else{
-						x2=x;y2=y;
-					}
-
-				}else if(i==2){
-					y=ymax;
-					x=x1+((ymax-y1)*1.0)/m;
-					if(y1>ymax){
-						x1=x;y1=y;
-					}else{
-						x2=x;y2=y;
-					}
-
-				}else{
-					y=ymin;
-					x=x1+((ymin-y1)*1.0)/m;
-					if(y1<ymin){
-						x1=x;y1=y;
-					}else{
-						x2=x;y2=y;
-					}
-
-				}
-			}
-			r1=code(x1,y1,xmin,xmax,ymin,ymax);
-			r2=code(x2,y2,xmin,xmax,ymin,ymax);
-			//printf("%d %d %d %d %d\n",i,x1,y1,x2,y2);
-
-		}
-	}
-	//printf("%d %d\n",x1,y1);
-	//printf("%d %d\n",x2,y2);
-	setcolor(4);
-	line(x1,y1,x2,y2);
-	delay(4000);
-	closegraph();
-}
-
-/*
-
-100 50 200 250
-100 200 100 200
-*/
